@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ケージの記録</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">質問 5 / 6　ケージの汚れ</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p id="agentMessage">
+                        ケージの中は<br>汚れていませんか？
+                    </p>
+                </div>
+            </div>
+
+            <div class="button-area">
+                <button
+                    class="yes-button answer-button"
+                    onclick="saveCage('きれい')"
+                >
+                    きれい
+                </button>
+
+                <button
+                    class="no-button answer-button"
+                    onclick="saveCage('汚れている')"
+                >
+                    汚れている
+                </button>
+            </div>
+
+            <!-- 回答後に表示されるフィードバック -->
+            <section id="feedbackBox" class="feedback-box" hidden>
+
+                <div class="feedback-title">
+                    🌿 今日の飼育ポイント
+                </div>
+
+                <p id="feedbackText" class="feedback-text"></p>
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="goToNextQuestion()"
+                >
+                    次の質問へ
+                </button>
+
+            </section>
+
+            <section class="today-record">
+                <h2>今日の記録（途中経過）</h2>
+
+                <div class="record-grid">
+
+                    <div>
+                        <p>ご飯</p>
+                        <span>🍚</span>
+                        <small id="foodStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>排泄</p>
+                        <span>💩</span>
+                        <small id="toiletStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>温度</p>
+                        <span>🌡️</span>
+                        <small id="tempStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>水</p>
+                        <span>💧</span>
+                        <small id="waterStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>ケージ</p>
+                        <span>▦</span>
+                        <small id="cageStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>行動の変化</p>
+                        <span>✏️</span>
+                        <small>未回答</small>
+                    </div>
+
+                </div>
+            </section>
+
+            <a href="water.html" class="history-link">
+                <button class="history-button">
+                    ← 前の画面に戻る
+                </button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const day = String(today.getDate()).padStart(2, "0");
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+
+        // 前のページで保存した回答を表示する
+        const food = localStorage.getItem("food");
+        const toilet = localStorage.getItem("toilet");
+        const temp = localStorage.getItem("temp");
+        const water = localStorage.getItem("water");
+
+        if (food) {
+            document.getElementById("foodStatus").textContent = food;
+        }
+
+        if (toilet) {
+            document.getElementById("toiletStatus").textContent = toilet;
+        }
+
+        if (temp) {
+            document.getElementById("tempStatus").textContent = temp;
+        }
+
+        if (water) {
+            document.getElementById("waterStatus").textContent = water;
+        }
+
+
+        // ケージの回答を保存してフィードバックを表示する
+        function saveCage(answer) {
+
+            const feedbackBox =
+                document.getElementById("feedbackBox");
+
+            const feedbackText =
+                document.getElementById("feedbackText");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            const cageStatus =
+                document.getElementById("cageStatus");
+
+            const answerButtons =
+                document.querySelectorAll(".answer-button");
+
+
+            // ケージの回答を保存
+            localStorage.setItem("cage", answer);
+
+
+            // 今日の記録欄を変更
+            cageStatus.textContent = answer;
+
+
+            // 回答に応じてフィードバックを変更
+            if (answer === "きれい") {
+
+                agentMessage.textContent =
+                    "清潔に保てていて良いです！";
+
+                feedbackText.textContent =
+                    "排泄物や食べ残しをこまめに取り除くことで、ケージを清潔に保ち、病気の予防につながります。";
+
+            } else {
+
+                agentMessage.textContent =
+                    "できる範囲で汚れを取り除いてみましょう。";
+
+                feedbackText.textContent =
+                    "汚れが残ると、細菌やにおいの原因になります。すべてを掃除できない日でも、排泄物や食べ残しだけは取り除くと安心です。";
+
+            }
+
+
+            // フィードバック欄を表示
+            feedbackBox.hidden = false;
+
+
+            // 二重回答を防ぐ
+            answerButtons.forEach(function(button) {
+                button.disabled = true;
+            });
+
+
+            // フィードバック欄まで自動で移動
+            feedbackBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        // 次の質問へ進む
+        function goToNextQuestion() {
+            window.location.href = "behavior.html";
+        }
+    </script>
+
+</body>
+</html>

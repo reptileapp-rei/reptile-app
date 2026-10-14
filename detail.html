@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記録の詳細</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">記録の詳細</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p>この日の様子を<br>確認しましょう。</p>
+                </div>
+            </div>
+
+            <section class="detail-card">
+
+                <h2 id="detailDate">記録</h2>
+
+                <div class="detail-item">
+                    <span class="detail-icon">🍚</span>
+                    <div>
+                        <p class="detail-title">ご飯</p>
+                        <p class="detail-text" id="detailFood">未回答</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-icon">💩</span>
+                    <div>
+                        <p class="detail-title">排泄</p>
+                        <p class="detail-text" id="detailToilet">未回答</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-icon">🌡️</span>
+                    <div>
+                        <p class="detail-title">温度</p>
+                        <p class="detail-text" id="detailTemp">未回答</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-icon">💧</span>
+                    <div>
+                        <p class="detail-title">水</p>
+                        <p class="detail-text" id="detailWater">未回答</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-icon">▦</span>
+                    <div>
+                        <p class="detail-title">ケージ</p>
+                        <p class="detail-text" id="detailCage">未回答</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-icon">✏️</span>
+                    <div>
+                        <p class="detail-title">行動の変化</p>
+                        <p class="detail-text" id="detailBehavior">未回答</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <a href="history.html" class="history-link">
+                <button class="history-button">← 過去の記録に戻る</button>
+            </a>
+
+            <br>
+
+            <a href="index.html" class="history-link">
+                <button class="history-button">🏠 最初の画面に戻る</button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を右上に表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+        // URLから index を取り出す
+        const params = new URLSearchParams(window.location.search);
+        const index = params.get("index");
+
+        // 保存された記録を取り出す
+        const records = JSON.parse(localStorage.getItem("records")) || [];
+
+        // indexに対応する記録を取得する
+        const record = records[index];
+
+        if (record) {
+            document.getElementById("detailDate").textContent = `${record.date} の記録`;
+
+            document.getElementById("detailFood").textContent = record.food || "未回答";
+            document.getElementById("detailToilet").textContent = record.toilet || "未回答";
+            document.getElementById("detailTemp").textContent = record.temp || "未回答";
+            document.getElementById("detailWater").textContent = record.water || "未回答";
+            document.getElementById("detailCage").textContent = record.cage || "未回答";
+            document.getElementById("detailBehavior").textContent = record.behavior || "未回答";
+        } else {
+            document.getElementById("detailDate").textContent = "記録が見つかりません";
+
+            document.getElementById("detailFood").textContent = "-";
+            document.getElementById("detailToilet").textContent = "-";
+            document.getElementById("detailTemp").textContent = "-";
+            document.getElementById("detailWater").textContent = "-";
+            document.getElementById("detailCage").textContent = "-";
+            document.getElementById("detailBehavior").textContent = "-";
+        }
+    </script>
+
+</body>
+</html>

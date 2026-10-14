@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温度の記録</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">質問 3 / 6　温度</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p id="agentMessage">
+                        ケージ内の温度は<br>適切ですか？
+                    </p>
+                </div>
+            </div>
+
+            <div class="button-area">
+                <button
+                    class="yes-button answer-button"
+                    onclick="saveTemp('適切')"
+                >
+                    適切
+                </button>
+
+                <button
+                    class="no-button answer-button"
+                    onclick="saveTemp('気になる')"
+                >
+                    気になる
+                </button>
+            </div>
+
+            <!-- 回答後に表示されるフィードバック -->
+            <section id="feedbackBox" class="feedback-box" hidden>
+
+                <div class="feedback-title">
+                    🌿 今日の飼育ポイント
+                </div>
+
+                <p id="feedbackText" class="feedback-text"></p>
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="goToNextQuestion()"
+                >
+                    次の質問へ
+                </button>
+
+            </section>
+
+            <section class="today-record">
+                <h2>今日の記録（途中経過）</h2>
+
+                <div class="record-grid">
+
+                    <div>
+                        <p>ご飯</p>
+                        <span>🍚</span>
+                        <small id="foodStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>排泄</p>
+                        <span>💩</span>
+                        <small id="toiletStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>温度</p>
+                        <span>🌡️</span>
+                        <small id="tempStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>水</p>
+                        <span>💧</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>ケージ</p>
+                        <span>▦</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>行動の変化</p>
+                        <span>✏️</span>
+                        <small>未回答</small>
+                    </div>
+
+                </div>
+            </section>
+
+            <a href="toilet.html" class="history-link">
+                <button class="history-button">
+                    ← 前の画面に戻る
+                </button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+
+        // 前のページで保存した「ご飯」の回答を表示する
+        const food = localStorage.getItem("food");
+
+        if (food) {
+            document.getElementById("foodStatus").textContent = food;
+        }
+
+
+        // 前のページで保存した「排泄」の回答を表示する
+        const toilet = localStorage.getItem("toilet");
+
+        if (toilet) {
+            document.getElementById("toiletStatus").textContent = toilet;
+        }
+
+
+        // 温度の回答を保存してフィードバックを表示する
+        function saveTemp(answer) {
+
+            const feedbackBox =
+                document.getElementById("feedbackBox");
+
+            const feedbackText =
+                document.getElementById("feedbackText");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            const tempStatus =
+                document.getElementById("tempStatus");
+
+            const answerButtons =
+                document.querySelectorAll(".answer-button");
+
+
+            // 温度の回答を保存
+            localStorage.setItem("temp", answer);
+
+
+            // 今日の記録欄を変更
+            tempStatus.textContent = answer;
+
+
+            // 回答に応じてフィードバックを変更
+            if (answer === "適切") {
+
+                agentMessage.textContent =
+                    "温度を確認できていて良いです！";
+
+                feedbackText.textContent =
+                    "爬虫類は自分で体温を一定に保つことが難しいため、温度管理は体調を維持するうえで大切です。これからも種類に合った温度帯を保てているか確認しましょう。";
+
+            } else {
+
+                agentMessage.textContent =
+                    "種類に合った温度か確認してみましょう。";
+
+                feedbackText.textContent =
+                    "温度が合わないと、食欲・消化・活動量に影響することがあります。飼育している種類に適した温度帯を調べ、ケージ内の暖かい場所と涼しい場所の両方を確認しましょう。";
+
+            }
+
+
+            // フィードバック欄を表示
+            feedbackBox.hidden = false;
+
+
+            // 二重回答を防ぐ
+            answerButtons.forEach(function(button) {
+                button.disabled = true;
+            });
+
+
+            // フィードバック欄まで自動で移動
+            feedbackBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        // 次の質問へ進む
+        function goToNextQuestion() {
+            window.location.href = "water.html";
+        }
+    </script>
+
+</body>
+</html>
