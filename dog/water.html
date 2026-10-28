@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水の記録</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">質問 4 / 6　水</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p id="agentMessage">
+                        今日は水を<br>交換しましたか？
+                    </p>
+                </div>
+            </div>
+
+            <div class="button-area">
+                <button
+                    class="yes-button answer-button"
+                    onclick="saveWater('○')"
+                >
+                    はい
+                </button>
+
+                <button
+                    class="no-button answer-button"
+                    onclick="saveWater('×')"
+                >
+                    いいえ
+                </button>
+            </div>
+
+            <!-- 回答後に表示されるフィードバック -->
+            <section id="feedbackBox" class="feedback-box" hidden>
+
+                <div class="feedback-title">
+                    🌿 今日の飼育ポイント
+                </div>
+
+                <p id="feedbackText" class="feedback-text"></p>
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="goToNextQuestion()"
+                >
+                    次の質問へ
+                </button>
+
+            </section>
+
+            <section class="today-record">
+                <h2>今日の記録（途中経過）</h2>
+
+                <div class="record-grid">
+
+                    <div>
+                        <p>ご飯</p>
+                        <span>🍚</span>
+                        <small id="foodStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>排泄</p>
+                        <span>💩</span>
+                        <small id="toiletStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>温度</p>
+                        <span>🌡️</span>
+                        <small id="tempStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>水</p>
+                        <span>💧</span>
+                        <small id="waterStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>ケージ</p>
+                        <span>▦</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>行動の変化</p>
+                        <span>✏️</span>
+                        <small>未回答</small>
+                    </div>
+
+                </div>
+            </section>
+
+            <a href="temp.html" class="history-link">
+                <button class="history-button">
+                    ← 前の画面に戻る
+                </button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const day = String(today.getDate()).padStart(2, "0");
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+
+        // 前のページで保存した回答を表示する
+        const food = localStorage.getItem("food");
+        const toilet = localStorage.getItem("toilet");
+        const temp = localStorage.getItem("temp");
+
+        if (food) {
+            document.getElementById("foodStatus").textContent = food;
+        }
+
+        if (toilet) {
+            document.getElementById("toiletStatus").textContent = toilet;
+        }
+
+        if (temp) {
+            document.getElementById("tempStatus").textContent = temp;
+        }
+
+
+        // 水の回答を保存してフィードバックを表示する
+        function saveWater(answer) {
+
+            const feedbackBox =
+                document.getElementById("feedbackBox");
+
+            const feedbackText =
+                document.getElementById("feedbackText");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            const waterStatus =
+                document.getElementById("waterStatus");
+
+            const answerButtons =
+                document.querySelectorAll(".answer-button");
+
+
+            // 水の回答を保存
+            localStorage.setItem("water", answer);
+
+
+            // 今日の記録欄を変更
+            waterStatus.textContent = answer;
+
+
+            // 回答に応じてフィードバックを変更
+            if (answer === "○") {
+
+                agentMessage.textContent =
+                    "水を確認できていて安心です！";
+
+                feedbackText.textContent =
+                    "水入れの汚れや水の減り方も一緒に確認すると、健康状態の変化に気づきやすくなります。";
+
+            } else {
+
+                agentMessage.textContent =
+                    "水入れの状態を確認してみましょう。";
+
+                feedbackText.textContent =
+                    "水分不足は脱水につながることがあります。水入れの有無だけでなく、水の汚れ、ケージ内の湿度、脱皮の状態も確認しましょう。";
+
+            }
+
+
+            // フィードバック欄を表示
+            feedbackBox.hidden = false;
+
+
+            // 二重回答を防ぐ
+            answerButtons.forEach(function(button) {
+                button.disabled = true;
+            });
+
+
+            // フィードバック欄まで自動で移動
+            feedbackBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        // 次の質問へ進む
+        function goToNextQuestion() {
+            window.location.href = "cage.html";
+        }
+    </script>
+
+</body>
+</html>

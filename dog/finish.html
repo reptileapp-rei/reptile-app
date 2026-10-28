@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記録完了</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">記録完了</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p>今日の記録が<br>完了しました！</p>
+                </div>
+            </div>
+
+            <section class="today-record">
+                <h2>今日の記録</h2>
+
+                <div class="record-grid">
+                    <div>
+                        <p>ご飯</p>
+                        <span>🍚</span>
+                        <small id="foodStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>排泄</p>
+                        <span>💩</span>
+                        <small id="toiletStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>温度</p>
+                        <span>🌡️</span>
+                        <small id="tempStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>水</p>
+                        <span>💧</span>
+                        <small id="waterStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>ケージ</p>
+                        <span>▦</span>
+                        <small id="cageStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>行動の変化</p>
+                        <span>✏️</span>
+                        <small id="behaviorStatus">未回答</small>
+                    </div>
+                </div>
+                        </section>
+
+            <div class="behavior-memo-box">
+                <h2>行動の変化メモ</h2>
+                <p id="behaviorMemo">未回答</p>
+            </div>
+
+            <div class="finish-message">
+                <p>おつかれさまでした。</p>
+                <p>明日もペットの様子を一緒に確認しましょう。</p>
+            </div>
+
+            <a href="index.html" class="history-link">
+                <button class="history-button">🏠 最初の画面に戻る</button>
+            </a>
+
+            <br>
+
+            <a href="history.html" class="history-link">
+                <button class="history-button">📖 過去の記録を見る</button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を作る
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        // 右上の日付を表示する
+        document.getElementById("todayDate").textContent = formattedDate;
+
+        // 各質問ページで一時保存した回答を取り出す
+        const food = localStorage.getItem("food");
+        const toilet = localStorage.getItem("toilet");
+        const temp = localStorage.getItem("temp");
+        const water = localStorage.getItem("water");
+        const cage = localStorage.getItem("cage");
+        const behavior = localStorage.getItem("behavior");
+
+        // 完了画面にも回答内容を表示する
+        document.getElementById("foodStatus").textContent = food || "未回答";
+        document.getElementById("toiletStatus").textContent = toilet || "未回答";
+        document.getElementById("tempStatus").textContent = temp || "未回答";
+        document.getElementById("waterStatus").textContent = water || "未回答";
+        document.getElementById("cageStatus").textContent = cage || "未回答";
+        document.getElementById("behaviorStatus").textContent = behavior || "未回答";
+        document.getElementById("behaviorMemo").textContent = behavior || "未回答";
+        // 今回の1日分の記録を作る
+        const newRecord = {
+            date: formattedDate,
+            food: food,
+            toilet: toilet,
+            temp: temp,
+            water: water,
+            cage: cage,
+            behavior: behavior
+        };
+
+        // 今までの記録を取り出す
+        let records = JSON.parse(localStorage.getItem("records")) || [];
+
+        // 同じ日付の記録がすでにあれば、上書きする
+        const sameDateIndex = records.findIndex(record => record.date === formattedDate);
+
+        if (sameDateIndex !== -1) {
+            records[sameDateIndex] = newRecord;
+        } else {
+            records.push(newRecord);
+        }
+
+        // 過去の記録として保存する
+        localStorage.setItem("records", JSON.stringify(records));
+    </script>
+
+</body>
+</html>

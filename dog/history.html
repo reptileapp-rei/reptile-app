@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>過去の記録</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">過去の記録</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p>これまでの記録を<br>確認できます。</p>
+                </div>
+            </div>
+
+            <section class="history-list" id="historyList"></section>
+
+            <a href="index.html" class="history-link">
+                <button class="history-button">🏠 最初の画面に戻る</button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+        // 保存された過去の記録を取り出す
+        const records = JSON.parse(localStorage.getItem("records")) || [];
+
+        const historyList = document.getElementById("historyList");
+
+        // 記録がない場合
+        if (records.length === 0) {
+            historyList.innerHTML = `
+                <p style="text-align:center;">まだ記録がありません。</p>
+            `;
+        } else {
+            // 新しい日付の記録が上に来るようにする
+            records.slice().reverse().forEach((record, index) => {
+                const originalIndex = records.length - 1 - index;
+
+                historyList.innerHTML += `
+                    <a href="detail.html?index=${originalIndex}" class="history-card">
+                        <div class="history-date">${record.date}</div>
+                        <div class="history-summary">
+                            <span>🍚 ご飯：${record.food}</span>
+                            <span>💩 排泄：${record.toilet}</span>
+                            <span>🌡️ 温度：${record.temp}</span>
+                        </div>
+                    </a>
+                `;
+            });
+        }
+    </script>
+
+</body>
+</html>

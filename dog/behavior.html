@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行動の記録</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">質問 6 / 6　行動の変化</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p id="agentMessage">
+                        いつもと違う行動は<br>ありましたか？
+                    </p>
+                </div>
+            </div>
+
+            <div class="button-area" id="behaviorButtons">
+                <button
+                    class="yes-button answer-button"
+                    onclick="showBehaviorInput()"
+                >
+                    ある
+                </button>
+
+                <button
+                    class="no-button answer-button"
+                    onclick="saveBehaviorNo()"
+                >
+                    ない
+                </button>
+            </div>
+
+            <!-- 「ある」を押したときに表示される入力欄 -->
+            <div
+                id="behaviorInputArea"
+                style="display: none; text-align: center; margin-top: 20px;"
+            >
+                <p>どのような行動がありましたか？</p>
+
+                <textarea
+                    id="behaviorText"
+                    rows="4"
+                    placeholder="例：いつもより動きが少ない、隠れている時間が長いなど"
+                ></textarea>
+
+                <br>
+
+                <button
+                    class="yes-button"
+                    id="saveBehaviorButton"
+                    onclick="saveBehaviorText()"
+                >
+                    記録する
+                </button>
+            </div>
+
+            <!-- 回答後に表示されるフィードバック -->
+            <section id="feedbackBox" class="feedback-box" hidden>
+
+                <div class="feedback-title">
+                    🌿 今日の飼育ポイント
+                </div>
+
+                <p id="feedbackText" class="feedback-text"></p>
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="goToFinish()"
+                >
+                    記録を完了する
+                </button>
+
+            </section>
+
+            <section class="today-record">
+                <h2>今日の記録（途中経過）</h2>
+
+                <div class="record-grid">
+
+                    <div>
+                        <p>ご飯</p>
+                        <span>🍚</span>
+                        <small id="foodStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>排泄</p>
+                        <span>💩</span>
+                        <small id="toiletStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>温度</p>
+                        <span>🌡️</span>
+                        <small id="tempStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>水</p>
+                        <span>💧</span>
+                        <small id="waterStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>ケージ</p>
+                        <span>▦</span>
+                        <small id="cageStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>行動の変化</p>
+                        <span>✏️</span>
+                        <small id="behaviorStatus">未回答</small>
+                    </div>
+
+                </div>
+            </section>
+
+            <a href="cage.html" class="history-link">
+                <button class="history-button">
+                    ← 前の画面に戻る
+                </button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const day = String(today.getDate()).padStart(2, "0");
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+
+        // 前のページで保存した回答を表示する
+        const food = localStorage.getItem("food");
+        const toilet = localStorage.getItem("toilet");
+        const temp = localStorage.getItem("temp");
+        const water = localStorage.getItem("water");
+        const cage = localStorage.getItem("cage");
+
+        if (food) {
+            document.getElementById("foodStatus").textContent = food;
+        }
+
+        if (toilet) {
+            document.getElementById("toiletStatus").textContent = toilet;
+        }
+
+        if (temp) {
+            document.getElementById("tempStatus").textContent = temp;
+        }
+
+        if (water) {
+            document.getElementById("waterStatus").textContent = water;
+        }
+
+        if (cage) {
+            document.getElementById("cageStatus").textContent = cage;
+        }
+
+
+        // 「ある」を押したら入力欄を表示する
+        function showBehaviorInput() {
+            const behaviorInputArea =
+                document.getElementById("behaviorInputArea");
+
+            const behaviorButtons =
+                document.getElementById("behaviorButtons");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            behaviorInputArea.style.display = "block";
+            behaviorButtons.style.display = "none";
+
+            agentMessage.textContent =
+                "気づいた変化を記録しておきましょう。";
+
+            document.getElementById("behaviorText").focus();
+        }
+
+
+        // 「ない」を押した場合
+        function saveBehaviorNo() {
+
+            const feedbackBox =
+                document.getElementById("feedbackBox");
+
+            const feedbackText =
+                document.getElementById("feedbackText");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            const behaviorStatus =
+                document.getElementById("behaviorStatus");
+
+            const behaviorButtons =
+                document.getElementById("behaviorButtons");
+
+
+            // 回答を保存
+            localStorage.setItem("behavior", "ない");
+
+
+            // 今日の記録欄を変更
+            behaviorStatus.textContent = "ない";
+
+
+            // エージェントの言葉とFBを変更
+            agentMessage.textContent =
+                "いつも通りなら安心です！";
+
+            feedbackText.textContent =
+                "いつも通りであることも大切な記録です。ただし、爬虫類は不調を隠すこともあるため、食欲、排泄、体重、動きなども合わせて見ておきましょう。";
+
+
+            // ボタンを非表示
+            behaviorButtons.style.display = "none";
+
+
+            // フィードバック欄を表示
+            feedbackBox.hidden = false;
+
+
+            // フィードバック欄まで自動で移動
+            feedbackBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        // 「ある」を選び、内容を書いた場合
+        function saveBehaviorText() {
+
+            const text =
+                document.getElementById("behaviorText").value.trim();
+
+            const feedbackBox =
+                document.getElementById("feedbackBox");
+
+            const feedbackText =
+                document.getElementById("feedbackText");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            const behaviorStatus =
+                document.getElementById("behaviorStatus");
+
+            const behaviorInputArea =
+                document.getElementById("behaviorInputArea");
+
+
+            // 未入力の場合
+            if (text === "") {
+                alert("行動の変化を入力してください。");
+                return;
+            }
+
+
+            // 入力内容を保存
+            localStorage.setItem("behavior", text);
+
+
+            // 今日の記録欄を変更
+            behaviorStatus.textContent = "あり";
+
+
+            // エージェントの言葉とFBを変更
+            agentMessage.textContent =
+                "変化に気づけていることが大切です！";
+
+            feedbackText.textContent =
+                "いつもより隠れる、動かない、攻撃的になるなど、小さな違いも記録しておきましょう。変化が続く場合や、食欲・排泄などにも異常がある場合は、飼育環境や体調を確認してください。";
+
+
+            // 入力欄を非表示
+            behaviorInputArea.style.display = "none";
+
+
+            // フィードバック欄を表示
+            feedbackBox.hidden = false;
+
+
+            // フィードバック欄まで自動で移動
+            feedbackBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        // 完了画面へ進む
+        function goToFinish() {
+            window.location.href = "finish.html";
+        }
+    </script>
+
+</body>
+</html>

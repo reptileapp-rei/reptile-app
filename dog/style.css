@@ -1,0 +1,574 @@
+/* =========================
+   ページ全体
+========================= */
+
+body {
+    background-color: #f7f4ea;
+    font-family: "Yu Gothic", "Hiragino Sans", sans-serif;
+    margin: 0;
+    padding: 20px 10px;
+    color: #333;
+}
+
+
+/* =========================
+   アプリ全体の枠
+========================= */
+
+.app {
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+
+    background-color: #fffdf6;
+    border: 2px solid #d8c8a8;
+    border-radius: 12px;
+
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   ヘッダー
+========================= */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #f3eddf;
+    padding: 12px 16px;
+
+    border-bottom: 1px solid #d8c8a8;
+}
+
+h1 {
+    margin: 0;
+
+    color: #333;
+    font-size: 18px;
+}
+
+.date {
+    padding: 6px 10px;
+
+    background-color: white;
+    border: 1px solid #cfc2a6;
+    border-radius: 6px;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   メイン部分
+========================= */
+
+main {
+    padding: 16px;
+}
+
+
+/* =========================
+   質問番号
+========================= */
+
+.question-number {
+    width: fit-content;
+    margin: 0 auto 12px;
+    padding: 6px 14px;
+
+    background-color: #7fa263;
+    color: white;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   エージェントと吹き出し
+========================= */
+
+.agent-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+}
+
+.agent {
+    width: 130px;
+    max-width: 38%;
+    height: auto;
+}
+
+.speech {
+    position: relative;
+
+    margin-left: 12px;
+    padding: 16px 18px;
+
+    background-color: white;
+    border: 2px solid #c9bfa3;
+    border-radius: 16px;
+
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.speech::before {
+    content: "";
+
+    position: absolute;
+    left: -18px;
+    top: 35px;
+
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 18px solid #c9bfa3;
+}
+
+.speech::after {
+    content: "";
+
+    position: absolute;
+    left: -14px;
+    top: 37px;
+
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 15px solid white;
+}
+
+.speech p {
+    margin: 0;
+}
+
+
+/* =========================
+   回答ボタン
+========================= */
+
+.button-area {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 14px 32px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.yes-button {
+    background-color: #8fba6f;
+    color: white;
+
+    box-shadow: 0 4px 0 #6d9850;
+}
+
+.no-button {
+    background-color: #f7b846;
+    color: white;
+
+    box-shadow: 0 4px 0 #d19627;
+}
+
+.yes-button:hover {
+    background-color: #84ad66;
+}
+
+.no-button:hover {
+    background-color: #e9aa3d;
+}
+
+.yes-button:active,
+.no-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+/* 回答後は、回答ボタンを押せなくする */
+
+.answer-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+
+    transform: none;
+}
+
+.answer-button:disabled:hover {
+    background-color: inherit;
+}
+
+
+/* =========================
+   回答後のフィードバック
+========================= */
+
+.feedback-box {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 0 0 20px;
+    padding: 18px;
+
+    background-color: #fff9e8;
+    border: 2px solid #d8c8a8;
+    border-radius: 14px;
+
+    box-shadow: 0 4px 0 #e4d5b5;
+}
+
+
+/* hidden属性が付いている間は表示しない */
+
+.feedback-box[hidden] {
+    display: none;
+}
+
+.feedback-title {
+    margin-bottom: 12px;
+
+    color: #4d6b3d;
+
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.feedback-text {
+    margin: 0;
+
+    color: #333;
+
+    font-size: 15px;
+    line-height: 1.8;
+    text-align: left;
+}
+
+
+/* =========================
+   次の質問へ進むボタン
+========================= */
+
+.next-button {
+    display: block;
+
+    width: 100%;
+    margin-top: 16px;
+    padding: 13px 16px;
+
+    background-color: #7fa263;
+    color: white;
+
+    border: none;
+    border-radius: 10px;
+
+    box-shadow: 0 4px 0 #5e7e48;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.next-button:hover {
+    background-color: #739657;
+}
+
+.next-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #5e7e48;
+}
+
+
+/* =========================
+   今日の記録
+========================= */
+
+.today-record {
+    margin-bottom: 14px;
+    padding: 10px;
+
+    background-color: #f8f1d8;
+    border: 1px solid #d0c19d;
+    border-radius: 8px;
+}
+
+.today-record h2 {
+    margin: 0 0 10px;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+.record-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+
+    background-color: white;
+    border: 1px solid #d0c19d;
+
+    text-align: center;
+}
+
+.record-grid div {
+    min-width: 0;
+    padding: 6px 2px;
+
+    border-right: 1px solid #d0c19d;
+
+    box-sizing: border-box;
+}
+
+.record-grid div:last-child {
+    border-right: none;
+}
+
+.record-grid p {
+    margin: 0 0 6px;
+
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.record-grid span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 24px;
+}
+
+.record-grid small {
+    display: block;
+
+    font-size: 10px;
+    line-height: 1.3;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   前の画面・履歴ボタン
+========================= */
+
+.history-link {
+    display: block;
+
+    text-decoration: none;
+}
+
+.history-button {
+    width: 100%;
+
+    background-color: #fffdf6;
+    color: #4d6b3d;
+
+    border: 2px solid #9cb17c;
+    box-shadow: none;
+
+    font-size: 16px;
+}
+
+.history-button:hover {
+    background-color: #f3f6ec;
+}
+
+.history-button:active {
+    transform: translateY(2px);
+}
+
+
+/* =========================
+   行動の変化・自由記述欄
+========================= */
+
+#behaviorInputArea {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    text-align: center;
+}
+
+#behaviorInputArea p {
+    margin-bottom: 10px;
+
+    color: #4d4d4d;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#behaviorText {
+    width: 80%;
+    max-width: 320px;
+    padding: 12px;
+
+    background-color: #fffdf8;
+    border: 2px solid #c9bfa3;
+    border-radius: 12px;
+
+    box-sizing: border-box;
+
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+
+    resize: none;
+}
+
+#behaviorText:focus {
+    outline: none;
+    border-color: #8fba6f;
+
+    box-shadow: 0 0 0 3px rgba(143, 186, 111, 0.15);
+}
+
+#behaviorInputArea .yes-button {
+    margin-top: 12px;
+    padding: 12px 28px;
+
+    font-size: 16px;
+}
+
+
+/* =========================
+   行動メモ表示欄
+========================= */
+
+.behavior-memo-box {
+    margin-bottom: 14px;
+    padding: 12px;
+
+    background-color: #fffdf8;
+    border: 2px solid #d0c19d;
+    border-radius: 10px;
+}
+
+.behavior-memo-box h2 {
+    margin: 0 0 8px;
+
+    color: #4d6b3d;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+.behavior-memo-box p {
+    margin: 0;
+
+    color: #333;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   スマートフォン対応
+========================= */
+
+@media screen and (max-width: 420px) {
+
+    body {
+        padding: 10px 6px;
+    }
+
+    header {
+        padding: 10px 12px;
+    }
+
+    h1 {
+        font-size: 16px;
+    }
+
+    .date {
+        padding: 5px 7px;
+        font-size: 11px;
+    }
+
+    main {
+        padding: 12px;
+    }
+
+    .agent {
+        width: 105px;
+    }
+
+    .speech {
+        margin-left: 8px;
+        padding: 12px 13px;
+
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .speech::before {
+        left: -15px;
+        top: 30px;
+
+        border-top-width: 8px;
+        border-bottom-width: 8px;
+        border-right-width: 15px;
+    }
+
+    .speech::after {
+        left: -11px;
+        top: 32px;
+
+        border-top-width: 6px;
+        border-bottom-width: 6px;
+        border-right-width: 12px;
+    }
+
+    .button-area {
+        gap: 10px;
+    }
+
+    button {
+        padding: 12px 22px;
+        font-size: 16px;
+    }
+
+    .record-grid p {
+        font-size: 9px;
+    }
+
+    .record-grid span {
+        font-size: 20px;
+    }
+
+    .record-grid small {
+        font-size: 8px;
+    }
+
+    .feedback-title {
+        font-size: 16px;
+    }
+
+    .feedback-text {
+        font-size: 14px;
+    }
+}
