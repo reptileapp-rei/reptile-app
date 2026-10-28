@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飼育記録アプリ</title>
+
+    <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#f7f4ea">
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js");
+    });
+  }
+</script>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">質問 1 / 6　ご飯</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p id="agentMessage">
+                        今日はご飯を<br>食べましたか？
+                    </p>
+                </div>
+            </div>
+
+            <div class="button-area">
+                <button
+                    class="yes-button answer-button"
+                    onclick="saveFood('○')"
+                >
+                    はい
+                </button>
+
+                <button
+                    class="no-button answer-button"
+                    onclick="saveFood('×')"
+                >
+                    いいえ
+                </button>
+            </div>
+
+            <!-- 回答後に表示されるフィードバック -->
+            <section id="feedbackBox" class="feedback-box" hidden>
+
+                <div class="feedback-title">
+                    🌿 今日の飼育ポイント
+                </div>
+
+                <p id="feedbackText" class="feedback-text"></p>
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="goToNextQuestion()"
+                >
+                    次の質問へ
+                </button>
+
+            </section>
+
+            <section class="today-record">
+                <h2>今日の記録（途中経過）</h2>
+
+                <div class="record-grid">
+
+                    <div>
+                        <p>ご飯</p>
+                        <span>🍚</span>
+                        <small id="foodRecord">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>排泄</p>
+                        <span>💩</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>温度</p>
+                        <span>🌡️</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>水</p>
+                        <span>💧</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>ケージ</p>
+                        <span>▦</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>行動の変化</p>
+                        <span>✏️</span>
+                        <small>未回答</small>
+                    </div>
+
+                </div>
+            </section>
+
+            <a href="history.html" class="history-link">
+                <button class="history-button">
+                    📖 過去の記録を見る
+                </button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+
+        // ご飯の回答を保存してフィードバックを表示する
+        function saveFood(answer) {
+
+            const feedbackBox =
+                document.getElementById("feedbackBox");
+
+            const feedbackText =
+                document.getElementById("feedbackText");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            const foodRecord =
+                document.getElementById("foodRecord");
+
+            const answerButtons =
+                document.querySelectorAll(".answer-button");
+
+
+            // 回答を保存
+            localStorage.setItem("food", answer);
+
+
+            // 今日の記録欄を変更
+            foodRecord.textContent = answer;
+
+
+            // 回答に応じてフィードバックを変更
+            if (answer === "○") {
+
+                agentMessage.textContent =
+                    "食べられていて安心です！";
+
+                feedbackText.textContent =
+                    "食べた量や食いつきも一緒に見ておくと、変化に気づきやすくなります。";
+
+            } else {
+
+                agentMessage.textContent =
+                    "食べていなくても、すぐに心配しすぎなくて大丈夫です。";
+
+                feedbackText.textContent =
+                    "爬虫類は毎日食べない種類もいます。脱皮前や気温の変化で食欲が落ちることもありますが、元気がない、体重が減る、拒食が続く場合は注意しましょう。";
+
+            }
+
+
+            // フィードバックを表示
+            feedbackBox.hidden = false;
+
+
+            // 二重回答を防ぐ
+            answerButtons.forEach(function(button) {
+                button.disabled = true;
+            });
+
+
+            // フィードバック欄まで移動
+            feedbackBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        // 次の質問へ進む
+        function goToNextQuestion() {
+            window.location.href = "toilet.html";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+
+{
+  "name": "爬虫類飼育記録アプリ",
+  "short_name": "飼育記録",
+  "description": "爬虫類の毎日の飼育を記録するアプリ",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f4ea",
+  "theme_color": "#f7f4ea",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

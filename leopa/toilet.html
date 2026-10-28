@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排泄の記録</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header>
+            <h1>🌿 飼育記録アプリ</h1>
+            <div class="date" id="todayDate"></div>
+        </header>
+
+        <main>
+
+            <div class="question-number">質問 2 / 6　排泄</div>
+
+            <div class="agent-area">
+                <img src="agent.png" alt="エージェント" class="agent">
+
+                <div class="speech">
+                    <p id="agentMessage">
+                        今日は排泄を<br>しましたか？
+                    </p>
+                </div>
+            </div>
+
+            <div class="button-area">
+                <button
+                    class="yes-button answer-button"
+                    onclick="saveToilet('○')"
+                >
+                    はい
+                </button>
+
+                <button
+                    class="no-button answer-button"
+                    onclick="saveToilet('×')"
+                >
+                    いいえ
+                </button>
+            </div>
+
+            <!-- 回答後に表示されるフィードバック -->
+            <section id="feedbackBox" class="feedback-box" hidden>
+
+                <div class="feedback-title">
+                    🌿 今日の飼育ポイント
+                </div>
+
+                <p id="feedbackText" class="feedback-text"></p>
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="goToNextQuestion()"
+                >
+                    次の質問へ
+                </button>
+
+            </section>
+
+            <section class="today-record">
+                <h2>今日の記録（途中経過）</h2>
+
+                <div class="record-grid">
+
+                    <div>
+                        <p>ご飯</p>
+                        <span>🍚</span>
+                        <small id="foodStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>排泄</p>
+                        <span>💩</span>
+                        <small id="toiletStatus">未回答</small>
+                    </div>
+
+                    <div>
+                        <p>温度</p>
+                        <span>🌡️</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>水</p>
+                        <span>💧</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>ケージ</p>
+                        <span>▦</span>
+                        <small>未回答</small>
+                    </div>
+
+                    <div>
+                        <p>行動の変化</p>
+                        <span>✏️</span>
+                        <small>未回答</small>
+                    </div>
+
+                </div>
+            </section>
+
+            <a href="index.html" class="history-link">
+                <button class="history-button">
+                    ← 前の画面に戻る
+                </button>
+            </a>
+
+        </main>
+
+    </div>
+
+    <script>
+        // 今日の日付を表示する
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}/${month}/${day}`;
+
+        document.getElementById("todayDate").textContent = formattedDate;
+
+
+        // 前のページで保存した「ご飯」の回答を表示する
+        const food = localStorage.getItem("food");
+
+        if (food) {
+            document.getElementById("foodStatus").textContent = food;
+        }
+
+
+        // 排泄の回答を保存してフィードバックを表示する
+        function saveToilet(answer) {
+
+            const feedbackBox =
+                document.getElementById("feedbackBox");
+
+            const feedbackText =
+                document.getElementById("feedbackText");
+
+            const agentMessage =
+                document.getElementById("agentMessage");
+
+            const toiletStatus =
+                document.getElementById("toiletStatus");
+
+            const answerButtons =
+                document.querySelectorAll(".answer-button");
+
+
+            // 排泄の回答を保存
+            localStorage.setItem("toilet", answer);
+
+
+            // 今日の記録欄を変更
+            toiletStatus.textContent = answer;
+
+
+            // 回答に応じてフィードバックを変更
+            if (answer === "○") {
+
+                agentMessage.textContent =
+                    "排泄が確認できました！";
+
+                feedbackText.textContent =
+                    "色・量・におい・形が、いつもと違わないかも見ておくと安心です。";
+
+            } else {
+
+                agentMessage.textContent =
+                    "排泄の間隔は日によって変わることがあります。";
+
+                feedbackText.textContent =
+                    "食べた量や種類、温度によって排泄の間隔は変わります。何日も出ない、苦しそう、腹部が張っている場合は、飼育環境や体調を確認しましょう。排泄の量や頻度の変化も、不調のサインになることがあります。";
+
+            }
+
+
+            // フィードバック欄を表示
+            feedbackBox.hidden = false;
+
+
+            // 二重回答を防ぐ
+            answerButtons.forEach(function(button) {
+                button.disabled = true;
+            });
+
+
+            // フィードバック欄まで自動で移動
+            feedbackBox.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+
+        // 次の質問へ進む
+        function goToNextQuestion() {
+            window.location.href = "temp.html";
+        }
+    </script>
+
+</body>
+</html>
